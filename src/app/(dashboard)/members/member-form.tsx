@@ -189,10 +189,18 @@ export function MemberForm({ member }: { member?: Member | null }) {
       </div>
 
       {state?.ok === false ? (
-        <p className="text-destructive sm:col-span-2 text-sm">{state.error}</p>
+        <div
+          role="alert"
+          className="border-destructive/30 bg-destructive/10 text-destructive sm:col-span-2 rounded-md border px-3 py-2 text-sm"
+        >
+          <p className="font-medium">Could not save</p>
+          <p className="mt-0.5 leading-relaxed">{state.error}</p>
+        </div>
       ) : null}
       {state?.ok === true ? (
-        <p className="sm:col-span-2 text-sm text-green-700">{state.message}</p>
+        <p className="sm:col-span-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+          {state.message}
+        </p>
       ) : null}
 
       <div className="sm:col-span-2">

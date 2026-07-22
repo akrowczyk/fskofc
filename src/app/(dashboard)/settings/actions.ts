@@ -7,6 +7,7 @@ import { getDb } from "@/db";
 import { assessmentConfig, auditLog, councilSettings } from "@/db/schema";
 import { rejectTaxIdFields } from "@/lib/domain/pii-guard";
 import { ASSESSMENT_DEFAULTS_2009 } from "@/lib/domain/assessment-defaults";
+import { formatZodError } from "@/lib/validations/format-errors";
 import { councilSettingsSchema } from "@/lib/validations/settings";
 
 async function requireFs() {
@@ -58,7 +59,7 @@ export async function saveCouncilSettings(
   if (!parsed.success) {
     return {
       ok: false,
-      error: parsed.error.issues.map((i) => i.message).join("; "),
+      error: formatZodError(parsed.error),
     };
   }
 

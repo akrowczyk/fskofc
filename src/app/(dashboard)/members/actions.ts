@@ -10,6 +10,7 @@ import {
   rejectTaxIdFields,
 } from "@/lib/domain/pii-guard";
 import { memberFormSchema } from "@/lib/validations/member";
+import { formatZodError } from "@/lib/validations/format-errors";
 import { parseRosterWorkbook } from "@/lib/roster/import";
 
 async function requireFs() {
@@ -64,7 +65,7 @@ export async function upsertMember(
   if (!parsed.success) {
     return {
       ok: false,
-      error: parsed.error.issues.map((i) => i.message).join("; "),
+      error: formatZodError(parsed.error),
     };
   }
   const data = parsed.data;

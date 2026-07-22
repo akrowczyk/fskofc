@@ -1,39 +1,99 @@
 import { z } from "zod";
+import { emptyToNull } from "./format-errors";
+
+const optionalText = (max: number, label: string) =>
+  z
+    .string()
+    .max(max, `${label} must be at most ${max} characters`)
+    .optional()
+    .nullable()
+    .or(z.literal(""));
 
 export const memberFormSchema = z.object({
-  memberNumber: z.string().min(1, "Member number required").max(50),
-  firstName: z.string().min(1).max(100),
-  lastName: z.string().min(1).max(100),
-  addressLine1: z.string().max(200).optional().nullable(),
-  addressLine2: z.string().max(200).optional().nullable(),
-  city: z.string().max(100).optional().nullable(),
-  state: z.string().max(40).optional().nullable(),
-  zip: z.string().max(20).optional().nullable(),
-  phone: z.string().max(40).optional().nullable(),
+  memberNumber: z
+    .string()
+    .trim()
+    .min(1, "Member number is required")
+    .max(50, "Member number must be at most 50 characters"),
+  firstName: z
+    .string()
+    .trim()
+    .min(1, "First name is required")
+    .max(100, "First name must be at most 100 characters"),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, "Last name is required")
+    .max(100, "Last name must be at most 100 characters"),
+  addressLine1: optionalText(200, "Address"),
+  addressLine2: optionalText(200, "Address line 2"),
+  city: optionalText(100, "City"),
+  state: optionalText(40, "State"),
+  zip: optionalText(20, "ZIP"),
+  phone: optionalText(40, "Phone"),
   email: z
-    .union([z.string().email(), z.literal("")])
+    .union([
+      z.literal(""),
+      z.null(),
+      z.string().email("Email must look like name@example.com"),
+    ])
     .optional()
-    .nullable(),
-  contactPref: z.enum(["email", "mail", "phone", "none"]).default("email"),
-  memberType: z
-    .enum([
+    .transform((v) => (v === "" || v == null ? null : v)),
+  contactPref: z.enum(["email", "mail", "phone", "none"], {
+    error: "Contact preference must be email, mail, phone, or none",
+  }),
+  memberType: z.enum(
+    [
       "associate",
       "insurance",
       "inactive",
       "honorary",
       "honorary_life",
       "disabled",
-    ])
-    .default("associate"),
-  degree: z.coerce.number().int().min(1).max(4).optional().nullable(),
-  joinDate: z.string().optional().nullable(),
-  status: z
-    .enum(["active", "suspended", "withdrawn", "deceased", "transferred"])
-    .default("active"),
-  duesRate: z.coerce.number().min(0).optional().nullable(),
-  notes: z.string().max(5000).optional().nullable(),
+    ],
+    {
+      error: "Member type is not a valid option",
+    },
+  ),
+  degree: z.preprocess(
+    emptyToNull,
+    z
+      .union([
+        z.null(),
+        z.coerce
+          .number({ error: "Degree must be a number from 1 to 4" })
+          .int("Degree must be a whole number")
+          .min(1, "Degree must be between 1 and 4")
+          .max(4, "Degree must be between 1 and 4"),
+      ])
+      .optional(),
+  ),
+  joinDate: z.preprocess(emptyToNull, z.string().nullable().optional()),
+  status: z.enum(
+    ["active", "suspended", "withdrawn", "deceased", "transferred"],
+    { error: "Status is not a valid option" },
+  ),
+  duesRate: z.preprocess(
+    emptyToNull,
+    z
+      .union([
+        z.null(),
+        z.coerce
+          .number({ error: "Dues rate must be a number" })
+          .min(0, "Dues rate cannot be negative"),
+      ])
+      .optional(),
+  ),
+  notes: optionalText(5000, "Notes"),
   addressRestricted: z
-    .union([z.boolean(), z.literal("on"), z.literal("true"), z.literal("false")])
+    .union([
+      z.boolean(),
+      z.literal("on"),
+      z.literal("true"),
+      z.literal("false"),
+      z.null(),
+      z.undefined(),
+    ])
     .optional()
     .transform((v) => v === true || v === "on" || v === "true"),
 });
