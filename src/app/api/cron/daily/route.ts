@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     let email: { sent: boolean; error?: string } = { sent: false };
     const digestTo =
       process.env.DIGEST_EMAIL ??
-      process.env.AUTH_ALLOWLIST?.split(",")[0]?.trim();
+      process.env.AUTH_USER_EMAIL?.trim();
 
     if (digestTo) {
       email = await sendDigestEmail(result.digest, digestTo);

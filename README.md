@@ -22,7 +22,7 @@ Full product plan: [`docs/PLAN.md`](./docs/PLAN.md).
 | App | Next.js (App Router) + TypeScript + Tailwind + shadcn/ui |
 | Hosting | **Vercel** |
 | Database | **Neon** Postgres + Drizzle ORM |
-| Auth | Auth.js (NextAuth v5) — Google, email allowlist |
+| Auth | Auth.js (NextAuth v5) — single-user email + password |
 | Email | Resend (approval-gated) |
 | Agent | Anthropic Claude + tool use |
 | Cron | Vercel Cron → `/api/cron/daily` |
@@ -59,9 +59,9 @@ Copy `.env.example` → `.env.local` (local) and the same keys into **Vercel →
 |----------|----------|---------|
 | `DATABASE_URL` | Yes | Neon **pooled** connection string |
 | `AUTH_SECRET` | Yes | `openssl rand -base64 32` |
-| `AUTH_GOOGLE_ID` | Yes | Google OAuth client ID |
-| `AUTH_GOOGLE_SECRET` | Yes | Google OAuth client secret |
-| `AUTH_ALLOWLIST` | Yes | Comma-separated emails allowed to sign in |
+| `AUTH_USER_EMAIL` | Yes | Your login email |
+| `AUTH_USER_PASSWORD` | Yes | Strong password (only you know it) |
+| `AUTH_USER_NAME` | Optional | Display name (default: Financial Secretary) |
 | `AUTH_URL` | Prod | e.g. `https://your-app.vercel.app` |
 | `CRON_SECRET` | Yes | Protects daily cron route |
 | `RESEND_API_KEY` | For email | Resend API key |
@@ -98,14 +98,16 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 (pgvector is for future RAG; keyword handbook seed works without it.)
 
-### 3. Google OAuth credentials
+### 3. Choose your login credentials
 
-1. [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials.
-2. Create **OAuth client ID** → Web application.
-3. **Authorized redirect URIs** (add both):
-   - `http://localhost:3000/api/auth/callback/google`
-   - `https://YOUR_VERCEL_DOMAIN/api/auth/callback/google`
-4. Copy Client ID + Client Secret into env vars.
+You only need an email + password of your choosing (stored as Vercel env vars — no Google Cloud project):
+
+```bash
+# Example
+AUTH_USER_EMAIL=you@example.com
+AUTH_USER_PASSWORD='use-a-long-random-password'
+AUTH_SECRET=$(openssl rand -base64 32)
+```
 
 ### 4. Import project on Vercel
 
@@ -123,8 +125,8 @@ Important:
 
 - `DATABASE_URL` = Neon pooled URL  
 - `AUTH_URL` = `https://<your-deployment>.vercel.app` (or custom domain)  
-- `AUTH_ALLOWLIST` = your Google email  
-- `CRON_SECRET` = long random string  
+- `AUTH_USER_EMAIL` / `AUTH_USER_PASSWORD` = your login  
+- `AUTH_SECRET` / `CRON_SECRET` = long random strings  
 
 After saving, **Redeploy** (Deployments → … → Redeploy).
 
@@ -186,12 +188,11 @@ Or sign in and click **Refresh deadlines** on the dashboard.
 Vercel → Project → Domains → add `fs.yourcouncil.org`. Update:
 
 - `AUTH_URL`
-- Google OAuth redirect URI  
 - Resend domain alignment if needed  
 
 ### 11. Post-deploy smoke test
 
-1. Sign in with allowlisted Google account (others must get Access Denied).  
+1. Sign in with `AUTH_USER_EMAIL` / `AUTH_USER_PASSWORD` (wrong password must fail).  
 2. **Settings** → save council 10325.  
 3. **Members** → import roster Excel or add a test member with email.  
 4. **Calendar** → Refresh deadlines → see assessment/audit/990 tasks.  
@@ -223,7 +224,7 @@ Vercel → Project → Domains → add `fs.yourcouncil.org`. Update:
 
 ## Security & compliance (baked in)
 
-- Auth on all member routes; fail-closed allowlist  
+- Auth on all member routes; single env-based login  
 - No SSNs / tax IDs (app-level reject guard)  
 - Persistent “mirror — not source of truth” labeling  
 - Email never sends without human approval  

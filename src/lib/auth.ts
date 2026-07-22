@@ -1,62 +1,97 @@
+import { timingSafeEqual } from "node:crypto";
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 
 /**
- * Parse AUTH_ALLOWLIST (comma-separated emails) into a normalized set.
- * Only allowlisted emails may sign in — this app holds member PII.
+ * Single-officer credentials auth.
+ * Set AUTH_USER_EMAIL + AUTH_USER_PASSWORD in env (Vercel / .env.local).
  */
-function getAllowlist(): Set<string> {
-  const raw = process.env.AUTH_ALLOWLIST ?? "";
-  return new Set(
-    raw
-      .split(",")
-      .map((e) => e.trim().toLowerCase())
-      .filter(Boolean),
+function credentialsConfigured(): boolean {
+  return Boolean(
+    process.env.AUTH_USER_EMAIL?.trim() && process.env.AUTH_USER_PASSWORD,
   );
+}
+
+function safeEqualString(a: string, b: string): boolean {
+  try {
+    const bufA = Buffer.from(a);
+    const bufB = Buffer.from(b);
+    if (bufA.length !== bufB.length) {
+      // Still compare to reduce obvious timing leaks on length
+      timingSafeEqual(bufA, bufA);
+      return false;
+    }
+    return timingSafeEqual(bufA, bufB);
+  } catch {
+    return false;
+  }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    Credentials({
+      id: "credentials",
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentialsConfigured()) {
+          console.error(
+            "[auth] AUTH_USER_EMAIL / AUTH_USER_PASSWORD not set — rejecting",
+          );
+          return null;
+        }
+
+        const email =
+          typeof credentials?.email === "string"
+            ? credentials.email.trim().toLowerCase()
+            : "";
+        const password =
+          typeof credentials?.password === "string" ? credentials.password : "";
+
+        if (!email || !password) return null;
+
+        const expectedEmail = process.env.AUTH_USER_EMAIL!.trim().toLowerCase();
+        const expectedPassword = process.env.AUTH_USER_PASSWORD!;
+
+        const emailOk = safeEqualString(email, expectedEmail);
+        const passwordOk = safeEqualString(password, expectedPassword);
+
+        if (!emailOk || !passwordOk) return null;
+
+        return {
+          id: "fs-primary",
+          email: expectedEmail,
+          name: process.env.AUTH_USER_NAME?.trim() || "Financial Secretary",
+          role: "fs",
+        };
+      },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   pages: {
     signIn: "/login",
     error: "/login",
   },
   callbacks: {
-    async signIn({ profile }) {
-      const email = profile?.email?.toLowerCase();
-      if (!email) return false;
-
-      const allowlist = getAllowlist();
-      // Fail closed: empty allowlist rejects everyone
-      if (allowlist.size === 0) {
-        console.error(
-          "[auth] AUTH_ALLOWLIST is empty — rejecting all sign-ins",
-        );
-        return false;
+    async jwt({ token, user }) {
+      if (user) {
+        token.email = user.email;
+        token.name = user.name;
+        token.role = (user as { role?: string }).role ?? "fs";
       }
-      return allowlist.has(email);
-    },
-    async jwt({ token, profile }) {
-      if (profile?.email) {
-        token.email = profile.email;
-        token.name = profile.name;
-        token.picture = profile.picture;
-      }
-      // Default role; Ticket 11 may expand to read-only GK/trustee
-      token.role = "fs";
+      if (!token.role) token.role = "fs";
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.email = token.email as string;
         session.user.name = token.name as string | null | undefined;
-        session.user.image = token.picture as string | null | undefined;
         session.user.role = (token.role as string) ?? "fs";
       }
       return session;
@@ -67,7 +102,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isPublic =
         pathname.startsWith("/login") ||
         pathname.startsWith("/api/auth") ||
-        pathname === "/api/cron/daily"; // protected by CRON_SECRET itself
+        pathname.startsWith("/api/cron") ||
+        pathname.startsWith("/api/webhooks");
 
       if (isPublic) return true;
       return isLoggedIn;

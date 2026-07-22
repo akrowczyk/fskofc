@@ -2,6 +2,8 @@ import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { signIn, auth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -40,39 +42,69 @@ export default async function LoginPage({
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
           <CardDescription>
-            Private officer app. Access is limited to allowlisted accounts.
+            Private officer app for the Financial Secretary. Use the email and
+            password set in your environment.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {error ? (
             <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {error === "AccessDenied"
-                ? "Your account is not on the allowlist for this app."
-                : "Sign-in failed. Check credentials and AUTH_ALLOWLIST."}
+              {error === "CredentialsSignin"
+                ? "Invalid email or password."
+                : "Sign-in failed. Check AUTH_USER_EMAIL and AUTH_USER_PASSWORD."}
             </p>
           ) : null}
 
           <form
-            action={async () => {
+            className="flex flex-col gap-4"
+            action={async (formData) => {
               "use server";
+              const email = String(formData.get("email") ?? "");
+              const password = String(formData.get("password") ?? "");
               try {
-                await signIn("google", { redirectTo: callbackUrl });
+                await signIn("credentials", {
+                  email,
+                  password,
+                  redirectTo: callbackUrl,
+                });
               } catch (e) {
                 if (e instanceof AuthError) {
                   redirect(`/login?error=${e.type}`);
                 }
+                // NextAuth throws NEXT_REDIRECT on success — rethrow
                 throw e;
               }
             }}
           >
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="username"
+                required
+                placeholder="you@example.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+              />
+            </div>
             <Button type="submit" className="w-full" size="lg">
-              Continue with Google
+              Sign in
             </Button>
           </form>
 
           <p className="text-muted-foreground text-center text-xs leading-relaxed">
-            Member data is confidential. Do not share login access. Official
-            ledgers remain at Officers Online (kofc.org).
+            Member data is confidential. Official ledgers remain at Officers
+            Online (kofc.org).
           </p>
         </CardContent>
       </Card>
