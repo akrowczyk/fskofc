@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MirrorBanner } from "@/components/mirror-banner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,9 +20,7 @@ export default async function MemberDetailPage({
 
   if (!process.env.DATABASE_URL) {
     return (
-      <p className="text-destructive text-sm">
-        Database not configured.
-      </p>
+      <p className="text-destructive text-sm">Database not configured.</p>
     );
   }
 
@@ -49,7 +46,7 @@ export default async function MemberDetailPage({
           <p className="text-muted-foreground font-mono text-sm">
             #{member.memberNumber}
             {member.syncedAt
-              ? ` · synced ${member.syncedAt.toISOString().slice(0, 10)}`
+              ? ` · roster synced ${member.syncedAt.toISOString().slice(0, 10)}`
               : ""}
           </p>
         </div>
@@ -57,13 +54,13 @@ export default async function MemberDetailPage({
           Back
         </Button>
       </div>
-      <MirrorBanner />
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Edit mirror record</CardTitle>
+          <CardTitle className="text-base">Member details</CardTitle>
           <CardDescription>
-            Source: {member.source ?? "unknown"}. Verify against kofc.org before
-            official actions.
+            {member.source
+              ? `Source: ${member.source}`
+              : "Contact info and notes for this member."}
           </CardDescription>
         </CardHeader>
         <CardContent>

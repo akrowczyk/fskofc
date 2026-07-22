@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MirrorBanner } from "@/components/mirror-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,14 +37,12 @@ export default async function MembersPage({
         <div>
           <h1 className="text-2xl font-semibold text-primary">Members</h1>
           <p className="text-muted-foreground mt-1 text-sm">
-            Contact mirror for Council 10325. Phone/email live here — not in
-            Member Management.
+            Contact info and notes for Council 10325. Phone and email live here —
+            the official tools don’t store them.
           </p>
         </div>
         <Button render={<Link href="/members/new" />}>Add member</Button>
       </div>
-
-      <MirrorBanner />
 
       {dbError ? (
         <p className="text-destructive text-sm">
@@ -82,7 +79,10 @@ export default async function MembersPage({
           <TableBody>
             {list.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-muted-foreground py-8 text-center">
+                <TableCell
+                  colSpan={5}
+                  className="text-muted-foreground py-8 text-center"
+                >
                   No members yet. Import a roster or add one manually.
                 </TableCell>
               </TableRow>

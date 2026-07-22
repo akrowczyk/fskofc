@@ -109,7 +109,7 @@ export default async function RetentionCasePage({
             </p>
           ) : (
             <p className="text-accent-foreground text-sm">
-              No phone/email on mirror — add contact info under Members before
+              No phone/email on file — add contact info under Members before
               personal outreach.
             </p>
           )}

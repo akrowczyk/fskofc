@@ -6,7 +6,6 @@ import {
   ShieldAlert,
   Users,
 } from "lucide-react";
-import { MirrorBanner } from "@/components/mirror-banner";
 import { RunEngineButton, TaskRowActions } from "@/components/task-actions";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -95,8 +94,6 @@ export default async function DashboardPage() {
         {dbOk ? <RunEngineButton /> : null}
       </div>
 
-      <MirrorBanner />
-
       {!dbOk ? (
         <Card className="border-dashed">
           <CardHeader>
@@ -134,7 +131,7 @@ export default async function DashboardPage() {
           title="Members"
           value={dbOk ? memberCount : "—"}
           icon={Users}
-          hint="Contact mirror"
+          hint="Roster & contacts"
         />
         <StatCard
           href="/correspondence"

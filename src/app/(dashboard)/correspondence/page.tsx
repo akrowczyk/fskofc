@@ -1,4 +1,3 @@
-import { MirrorBanner } from "@/components/mirror-banner";
 import {
   Card,
   CardContent,
@@ -50,12 +49,10 @@ export default async function CorrespondencePage() {
       <div>
         <h1 className="text-2xl font-semibold text-primary">Correspondence</h1>
         <p className="text-muted-foreground mt-1 text-sm">
-          Approval-gated email and printable letters. Nothing sends without your
-          approval. Official #423/#424/#1845 filings remain via kofc.org tools.
+          Email drafts need your approval before send. Printable letters for
+          personal contact and follow-up.
         </p>
       </div>
-
-      <MirrorBanner />
 
       {error ? <p className="text-destructive text-sm">{error}</p> : null}
 

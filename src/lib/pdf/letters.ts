@@ -57,7 +57,7 @@ export async function buildLetterPdf(
   draw(body, 11);
   y -= 24;
   draw(
-    `Generated ${new Date().toISOString().slice(0, 10)} · FS Companion (not a system of record)`,
+    `Generated ${new Date().toISOString().slice(0, 10)} · Council 10325 FS Companion`,
     8,
   );
 

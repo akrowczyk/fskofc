@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MirrorBanner } from "@/components/mirror-banner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,13 +18,12 @@ export default function NewMemberPage() {
           Back
         </Button>
       </div>
-      <MirrorBanner />
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Member mirror record</CardTitle>
+          <CardTitle className="text-base">New member</CardTitle>
           <CardDescription>
-            Prefer roster import for master fields. Use this form for contact
-            info the official tools cannot store.
+            Prefer roster import for bulk updates. Use this form for a single
+            member or contact details.
           </CardDescription>
         </CardHeader>
         <CardContent>

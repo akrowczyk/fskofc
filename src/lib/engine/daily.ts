@@ -299,7 +299,6 @@ export function formatDigestText(d: DigestPayload): string {
     "",
     `Pending correspondence approvals: ${d.pendingApprovals}`,
     "",
-    "— Mirror only; verify against kofc.org before official actions.",
   ];
   return lines.join("\n");
 }

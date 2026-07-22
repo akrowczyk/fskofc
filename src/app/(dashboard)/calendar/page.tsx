@@ -1,4 +1,3 @@
-import { MirrorBanner } from "@/components/mirror-banner";
 import { RunEngineButton, TaskRowActions } from "@/components/task-actions";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -52,8 +51,6 @@ export default async function CalendarPage() {
         </div>
         <RunEngineButton />
       </div>
-
-      <MirrorBanner />
 
       {error ? (
         <p className="text-destructive text-sm">

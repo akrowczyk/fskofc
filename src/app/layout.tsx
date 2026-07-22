@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s · FS Companion",
   },
   description:
-    "Private Financial Secretary operations cockpit for Holy Ghost Council 10325 — contact DB, deadlines, retention, correspondence. Not a system of record.",
+    "Private Financial Secretary operations cockpit for Holy Ghost Council 10325 — contacts, deadlines, retention, and correspondence.",
   robots: { index: false, follow: false },
   icons: {
     icon: [

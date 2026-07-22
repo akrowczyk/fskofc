@@ -76,9 +76,6 @@ export function AppSidebar() {
         })}
       </nav>
 
-      <div className="border-t border-sidebar-border p-3 text-[11px] leading-snug text-white/50">
-        Mirror only — verify against kofc.org. Not a system of record.
-      </div>
     </aside>
   );
 }

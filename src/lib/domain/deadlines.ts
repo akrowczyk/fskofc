@@ -142,7 +142,7 @@ export function expandBuiltinDeadlines(opts: ExpandOptions = {}): DeadlineOccurr
         `Roster reconcile after Jan ${year} freeze`,
         "member",
         dateInYear(year, 1, 15),
-        "Import weekly roster export; Member Management updates post Tuesdays. Mirror only — verify at kofc.org.",
+        "Import weekly roster export; Member Management updates post Tuesdays.",
         7,
       ),
       occ(

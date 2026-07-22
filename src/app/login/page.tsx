@@ -124,8 +124,7 @@ export default async function LoginPage({
           </form>
 
           <p className="text-muted-foreground text-center text-xs leading-relaxed">
-            Member data is confidential. Official ledgers remain at Officers
-            Online (kofc.org). Emblem used only inside this private app.
+            Member data is confidential. For council officers only.
           </p>
         </CardContent>
       </Card>
