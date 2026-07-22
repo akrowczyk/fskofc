@@ -24,7 +24,7 @@ Full product plan: [`docs/PLAN.md`](./docs/PLAN.md).
 | Database | **Neon** Postgres + Drizzle ORM |
 | Auth | Auth.js (NextAuth v5) — single-user email + password |
 | Email | Resend (approval-gated) |
-| Agent | Anthropic Claude + tool use |
+| Agent | **xAI Grok** (`XAI_API_KEY`, OpenAI-compatible tool calling) |
 | Cron | Vercel Cron → `/api/cron/daily` |
 
 ---
@@ -67,7 +67,8 @@ Copy `.env.example` → `.env.local` (local) and the same keys into **Vercel →
 | `RESEND_API_KEY` | For email | Resend API key |
 | `RESEND_FROM` | For email | Verified from-address |
 | `DIGEST_EMAIL` | Optional | Daily digest recipient (defaults to first allowlist email) |
-| `ANTHROPIC_API_KEY` | For full agent | Claude tool-use agent |
+| `XAI_API_KEY` | For full agent | Grok via https://api.x.ai/v1 (console.x.ai) |
+| `XAI_MODEL` | Optional | Default `grok-4.5` |
 | `VOYAGE_API_KEY` | Optional | Future vector embeddings (seeded keyword RAG works without it) |
 
 ---
@@ -177,10 +178,10 @@ Or sign in and click **Refresh deadlines** on the dashboard.
 
 **Nothing emails members until you Approve & send** in Correspondence.
 
-### 9. Anthropic (optional — full chat agent)
+### 9. xAI Grok (optional — full chat agent)
 
-1. [console.anthropic.com](https://console.anthropic.com) → API key.  
-2. Set `ANTHROPIC_API_KEY`.  
+1. Create an API key at [console.x.ai](https://console.x.ai).  
+2. Set `XAI_API_KEY` (and optionally `XAI_MODEL=grok-4.5`).  
 3. Without it, Assistant still returns handbook seed excerpts (offline mode).
 
 ### 10. Custom domain (optional)
@@ -200,7 +201,7 @@ Vercel → Project → Domains → add `fs.yourcouncil.org`. Update:
 6. **Correspondence** → draft email → Approve & send (if Resend configured).  
 7. **Audit** → seed filings + new audit period.  
 8. **Compensation** → enter dues + certs → check 1099 flag.  
-9. **Assistant** → “explain form 1845”.  
+9. **Assistant** → “explain form 1845” (needs `XAI_API_KEY` for full Grok tools).  
 10. **Governance** → confirm audit log entries.
 
 ---

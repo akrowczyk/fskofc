@@ -1,4 +1,8 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
+import type {
+  ChatCompletionMessageParam,
+  ChatCompletionToolMessageParam,
+} from "openai/resources/chat/completions";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/db";
@@ -10,7 +14,10 @@ import { searchHandbookLocal } from "@/lib/rag/retrieve";
 
 export const maxDuration = 60;
 
-const SYSTEM = `You are the Financial Secretary Companion assistant for Knights of Columbus Holy Ghost Council 10325 (Wood Dale, IL).
+/** Default model; override with XAI_MODEL env (e.g. grok-4.5). */
+const DEFAULT_MODEL = "grok-4.5";
+
+const SYSTEM = `You are the Financial Secretary Companion assistant for Knights of Columbus Holy Ghost Council 10325 (Wood Dale, IL), powered by Grok.
 
 Rules:
 1. You help with FS duties that live OUTSIDE official KofC Member Management / Member Billing. Never claim this app is the ledger of record.
@@ -19,6 +26,13 @@ Rules:
 4. Surface what's due using list_due_items. Prefer actionable brevity.
 5. Guardrails: Financial difficulty is NOT a valid reason for suspension. Form 100 needs #1845 on file 60 days. #1845 voids after 90 days.
 6. Do not request or store SSNs/tax IDs.`;
+
+function getXaiClient(apiKey: string) {
+  return new OpenAI({
+    apiKey,
+    baseURL: "https://api.x.ai/v1",
+  });
+}
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -38,7 +52,6 @@ export async function POST(request: Request) {
   const actor = session.user.email;
   let threadId = body.threadId ?? null;
 
-  // Greeting digest context
   let digestNote = "";
   if (process.env.DATABASE_URL) {
     try {
@@ -53,19 +66,18 @@ export async function POST(request: Request) {
     }
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.XAI_API_KEY;
   if (!apiKey) {
-    // Offline fallback without Anthropic
     const passages = searchHandbookLocal(message, 4);
     const reply =
       passages.length > 0
-        ? `Anthropic API key not configured. Handbook seed matches:\n\n${passages
+        ? `XAI_API_KEY not configured. Handbook seed matches:\n\n${passages
             .map(
               (p) =>
                 `**${p.heading}** (${p.sourceRef})\n${p.content}\n_(verify current figures)_`,
             )
             .join("\n\n")}\n\n${digestNote}`
-        : `Anthropic API key not configured. ${digestNote || "Set ANTHROPIC_API_KEY for full agent."}`;
+        : `XAI_API_KEY not configured. ${digestNote || "Set XAI_API_KEY for the full Grok agent (console.x.ai)."}`;
     return Response.json({
       reply,
       threadId,
@@ -92,8 +104,11 @@ export async function POST(request: Request) {
       });
     }
 
-    const client = new Anthropic({ apiKey });
-    const messages: Anthropic.MessageParam[] = [
+    const client = getXaiClient(apiKey);
+    const model = process.env.XAI_MODEL?.trim() || DEFAULT_MODEL;
+
+    const messages: ChatCompletionMessageParam[] = [
+      { role: "system", content: SYSTEM },
       {
         role: "user",
         content: digestNote
@@ -103,51 +118,64 @@ export async function POST(request: Request) {
     ];
 
     let finalText = "";
-    // Tool loop (max 6 rounds)
+
     for (let i = 0; i < 6; i++) {
-      const response = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
+      const response = await client.chat.completions.create({
+        model,
         max_tokens: 4096,
-        system: SYSTEM,
-        tools: agentTools,
         messages,
+        tools: agentTools,
+        tool_choice: "auto",
       });
 
-      const toolUses = response.content.filter(
-        (b): b is Anthropic.ToolUseBlock => b.type === "tool_use",
-      );
-      const texts = response.content
-        .filter((b): b is Anthropic.TextBlock => b.type === "text")
-        .map((b) => b.text);
+      const choice = response.choices[0];
+      const msg = choice?.message;
+      if (!msg) break;
 
-      if (toolUses.length === 0 || response.stop_reason === "end_turn") {
-        finalText = texts.join("\n") || finalText;
+      const toolCalls = msg.tool_calls ?? [];
+      const content = typeof msg.content === "string" ? msg.content : "";
+
+      if (toolCalls.length === 0 || choice.finish_reason === "stop") {
+        finalText = content || finalText;
         break;
       }
 
-      messages.push({ role: "assistant", content: response.content });
+      messages.push({
+        role: "assistant",
+        content: content || null,
+        tool_calls: toolCalls,
+      });
 
-      const toolResults: Anthropic.ToolResultBlockParam[] = [];
-      for (const tu of toolUses) {
+      for (const tc of toolCalls) {
+        if (tc.type !== "function") continue;
+        const name = tc.function.name;
+        let args: unknown = {};
+        try {
+          args = JSON.parse(tc.function.arguments || "{}");
+        } catch {
+          args = {};
+        }
+
         let result: unknown;
         try {
-          result = await runAgentTool(tu.name, tu.input, actor);
+          result = await runAgentTool(name, args, actor);
         } catch (e) {
           result = {
             error: e instanceof Error ? e.message : "Tool failed",
           };
         }
-        toolResults.push({
-          type: "tool_result",
-          tool_use_id: tu.id,
+
+        const toolMsg: ChatCompletionToolMessageParam = {
+          role: "tool",
+          tool_call_id: tc.id,
           content: JSON.stringify(result),
-        });
+        };
+        messages.push(toolMsg);
       }
-      messages.push({ role: "user", content: toolResults });
-      finalText = texts.join("\n");
+
+      if (content) finalText = content;
     }
 
-    // one more if still empty
     if (!finalText) {
       finalText =
         "I processed your request with tools. Check Correspondence / Tasks / Retention for changes. (Drafts never auto-send.)";
@@ -164,10 +192,11 @@ export async function POST(request: Request) {
         action: "agent.chat",
         entity: "chat_threads",
         entityId: threadId,
+        detail: { model },
       });
     }
 
-    return Response.json({ reply: finalText, threadId });
+    return Response.json({ reply: finalText, threadId, model });
   } catch (e) {
     console.error("[agent]", e);
     return Response.json(

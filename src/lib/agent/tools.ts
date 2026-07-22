@@ -1,139 +1,177 @@
 import { z } from "zod";
+import type { ChatCompletionTool } from "openai/resources/chat/completions";
 
-/** Anthropic tool definitions for the FS assistant */
-export const agentTools = [
+/**
+ * OpenAI-compatible tool defs for xAI Grok (api.x.ai).
+ * Handlers live in handlers.ts and stay provider-agnostic.
+ */
+export const agentTools: ChatCompletionTool[] = [
   {
-    name: "search_handbook",
-    description:
-      "Search the Financial Secretary handbook knowledge base. Always cite section/source. Flag 2009 dollar figures for verification.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        query: { type: "string", description: "Search query" },
-      },
-      required: ["query"],
-    },
-  },
-  {
-    name: "explain_form",
-    description:
-      "Explain a KofC form by number (e.g. 1845, 100, 157, 423, 424, 1295, 365, 990).",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        form_number: { type: "string" },
-      },
-      required: ["form_number"],
-    },
-  },
-  {
-    name: "list_due_items",
-    description: "List open tasks and upcoming deadlines.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        timeframe: {
-          type: "string",
-          description: "today | week | all",
+    type: "function",
+    function: {
+      name: "search_handbook",
+      description:
+        "Search the Financial Secretary handbook knowledge base. Always cite section/source. Flag 2009 dollar figures for verification.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Search query" },
         },
+        required: ["query"],
       },
-      required: [],
     },
   },
   {
-    name: "search_members",
-    description: "Search the member mirror by name, number, email, or phone.",
-    input_schema: {
-      type: "object" as const,
-      properties: { q: { type: "string" } },
-      required: ["q"],
-    },
-  },
-  {
-    name: "get_retention_status",
-    description: "Get retention case status and next action for a member.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        member_id: { type: "string" },
-        member_number: { type: "string" },
-      },
-      required: [],
-    },
-  },
-  {
-    name: "create_task",
-    description: "Create a manual to-do task.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        title: { type: "string" },
-        detail: { type: "string" },
-        due_date: { type: "string", description: "YYYY-MM-DD" },
-        category: { type: "string" },
-      },
-      required: ["title"],
-    },
-  },
-  {
-    name: "complete_task",
-    description: "Mark a task done by id.",
-    input_schema: {
-      type: "object" as const,
-      properties: { id: { type: "string" } },
-      required: ["id"],
-    },
-  },
-  {
-    name: "draft_email",
-    description:
-      "Create an email draft with status needs_approval. NEVER sends. Templates: welcome, dues_reminder, event, insurance_referral, custom.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        member_id: { type: "string" },
-        purpose: {
-          type: "string",
-          description: "welcome | dues_reminder | event | insurance_referral | custom",
+    type: "function",
+    function: {
+      name: "explain_form",
+      description:
+        "Explain a KofC form by number (e.g. 1845, 100, 157, 423, 424, 1295, 365, 990).",
+      parameters: {
+        type: "object",
+        properties: {
+          form_number: { type: "string" },
         },
-        subject: { type: "string" },
-        body: { type: "string" },
+        required: ["form_number"],
       },
-      required: ["member_id", "purpose"],
     },
   },
   {
-    name: "queue_mail_task",
-    description:
-      "Queue a snail-mail letter task (draft PDF). letter_type: 423, 424, KA1, 1845, welcome. Never files with Supreme.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        member_id: { type: "string" },
-        letter_type: { type: "string" },
+    type: "function",
+    function: {
+      name: "list_due_items",
+      description: "List open tasks and upcoming deadlines.",
+      parameters: {
+        type: "object",
+        properties: {
+          timeframe: {
+            type: "string",
+            description: "today | week | all",
+          },
+        },
+        required: [],
       },
-      required: ["member_id", "letter_type"],
     },
   },
   {
-    name: "open_retention_case",
-    description: "Open a retention case for a member if none is open.",
-    input_schema: {
-      type: "object" as const,
-      properties: { member_id: { type: "string" } },
-      required: ["member_id"],
+    type: "function",
+    function: {
+      name: "search_members",
+      description: "Search the member mirror by name, number, email, or phone.",
+      parameters: {
+        type: "object",
+        properties: { q: { type: "string" } },
+        required: ["q"],
+      },
     },
   },
   {
-    name: "advance_case",
-    description: "Advance a retention case to a new state.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        case_id: { type: "string" },
-        to_state: { type: "string" },
+    type: "function",
+    function: {
+      name: "get_retention_status",
+      description: "Get retention case status and next action for a member.",
+      parameters: {
+        type: "object",
+        properties: {
+          member_id: { type: "string" },
+          member_number: { type: "string" },
+        },
+        required: [],
       },
-      required: ["case_id", "to_state"],
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_task",
+      description: "Create a manual to-do task.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          detail: { type: "string" },
+          due_date: { type: "string", description: "YYYY-MM-DD" },
+          category: { type: "string" },
+        },
+        required: ["title"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "complete_task",
+      description: "Mark a task done by id.",
+      parameters: {
+        type: "object",
+        properties: { id: { type: "string" } },
+        required: ["id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "draft_email",
+      description:
+        "Create an email draft with status needs_approval. NEVER sends. Templates: welcome, dues_reminder, event, insurance_referral, custom.",
+      parameters: {
+        type: "object",
+        properties: {
+          member_id: { type: "string" },
+          purpose: {
+            type: "string",
+            description:
+              "welcome | dues_reminder | event | insurance_referral | custom",
+          },
+          subject: { type: "string" },
+          body: { type: "string" },
+        },
+        required: ["member_id", "purpose"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "queue_mail_task",
+      description:
+        "Queue a snail-mail letter task (draft PDF). letter_type: 423, 424, KA1, 1845, welcome. Never files with Supreme.",
+      parameters: {
+        type: "object",
+        properties: {
+          member_id: { type: "string" },
+          letter_type: { type: "string" },
+        },
+        required: ["member_id", "letter_type"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "open_retention_case",
+      description: "Open a retention case for a member if none is open.",
+      parameters: {
+        type: "object",
+        properties: { member_id: { type: "string" } },
+        required: ["member_id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "advance_case",
+      description: "Advance a retention case to a new state.",
+      parameters: {
+        type: "object",
+        properties: {
+          case_id: { type: "string" },
+          to_state: { type: "string" },
+        },
+        required: ["case_id", "to_state"],
+      },
     },
   },
 ];

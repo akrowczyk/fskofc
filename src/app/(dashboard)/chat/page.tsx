@@ -30,8 +30,8 @@ export default async function ChatPage() {
       <div>
         <h1 className="text-2xl font-semibold text-primary">Assistant</h1>
         <p className="text-muted-foreground mt-1 text-sm">
-          Handbook-grounded agent with tool use. Drafts only — you approve all
-          sends. Verify dollar figures against current Supreme/IRS data.
+          Grok-powered assistant with handbook tools. Drafts only — you approve
+          all sends. Verify dollar figures against current Supreme/IRS data.
         </p>
       </div>
       <ChatClient greeting={greeting} />
