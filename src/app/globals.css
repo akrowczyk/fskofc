@@ -1,26 +1,148 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* Knights of Columbus palette — Part 8 of PLAN.md
+   Navy #003595 (PMS 661 C), Gold #FAA514 (PMS 137 C), Red #C8102E */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-kofc-navy: var(--kofc-navy);
+  --color-kofc-gold: var(--kofc-gold);
+  --color-kofc-red: var(--kofc-red);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Official KofC tokens */
+  --kofc-navy: #003595;
+  --kofc-gold: #faa514;
+  --kofc-red: #c8102e;
+  --kofc-white: #ffffff;
+
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  /* Primary = KofC Navy */
+  --primary: #003595;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f5f7;
+  --secondary-foreground: #003595;
+  --muted: #f4f5f7;
+  --muted-foreground: #5c6370;
+  /* Accent = KofC Gold */
+  --accent: #faa514;
+  --accent-foreground: #1a1a1a;
+  /* Destructive = KofC Red */
+  --destructive: #c8102e;
+  --border: #e2e5eb;
+  --input: #e2e5eb;
+  --ring: #003595;
+  --chart-1: #003595;
+  --chart-2: #faa514;
+  --chart-3: #c8102e;
+  --chart-4: #5c6370;
+  --chart-5: #8b929e;
+  --radius: 0.5rem;
+  --sidebar: #003595;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #faa514;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #0a4ab8;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #0a4ab8;
+  --sidebar-ring: #faa514;
+}
+
+.dark {
+  --background: #0b1220;
+  --foreground: #f4f5f7;
+  --card: #121a2b;
+  --card-foreground: #f4f5f7;
+  --popover: #121a2b;
+  --popover-foreground: #f4f5f7;
+  --primary: #4d7fd6;
+  --primary-foreground: #ffffff;
+  --secondary: #1a2438;
+  --secondary-foreground: #f4f5f7;
+  --muted: #1a2438;
+  --muted-foreground: #a0a8b8;
+  --accent: #faa514;
+  --accent-foreground: #1a1a1a;
+  --destructive: #e84a5f;
+  --border: #2a3548;
+  --input: #2a3548;
+  --ring: #4d7fd6;
+  --sidebar: #0b1220;
+  --sidebar-foreground: #f4f5f7;
+  --sidebar-primary: #faa514;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #1a2438;
+  --sidebar-accent-foreground: #f4f5f7;
+  --sidebar-border: #2a3548;
+  --sidebar-ring: #faa514;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+    font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-primary font-semibold tracking-tight;
+  }
 }
