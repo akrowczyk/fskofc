@@ -11,7 +11,8 @@ This app is **not** a system of record. **Member Management** and **Member Billi
 - Audit-prep worksheets, filings & compensation trackers
 - Handbook-grounded chat assistant (drafts only — never auto-sends)
 
-Full product plan: [`docs/PLAN.md`](./docs/PLAN.md).
+Full product plan: [`docs/PLAN.md`](./docs/PLAN.md).  
+**Backlog / future work:** [`docs/FUTURE_ENHANCEMENTS.md`](./docs/FUTURE_ENHANCEMENTS.md).
 
 ---
 
