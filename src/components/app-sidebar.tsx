@@ -14,6 +14,7 @@ import {
   ShieldAlert,
   Users,
 } from "lucide-react";
+import { CouncilLogo } from "@/components/council-logo";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -33,15 +34,22 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-60 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
-      <div className="border-b border-sidebar-border px-4 py-5">
-        <p className="text-xs font-medium tracking-wide text-sidebar-primary uppercase">
-          Council 10325
-        </p>
-        <h1 className="mt-1 text-lg font-semibold text-white">
-          FS Companion
-        </h1>
-        <p className="mt-0.5 text-xs text-white/70">Holy Ghost · Wood Dale</p>
+    <aside className="flex w-60 shrink-0 flex-col border-r-[3px] border-kofc-gold bg-sidebar text-sidebar-foreground">
+      <div className="border-b border-sidebar-border px-4 py-4">
+        <Link href="/" className="flex items-center gap-3">
+          <CouncilLogo size={48} className="shrink-0 drop-shadow-sm" />
+          <div className="min-w-0 border-l border-white/25 pl-3">
+            <p className="text-[11px] font-bold tracking-[0.12em] text-kofc-gold uppercase">
+              Council 10325
+            </p>
+            <h1 className="mt-0.5 text-base font-semibold text-white">
+              FS Companion
+            </h1>
+            <p className="mt-0.5 text-[11px] leading-snug text-white/70">
+              Holy Ghost · Wood Dale
+            </p>
+          </div>
+        </Link>
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5 p-3">
@@ -57,8 +65,8 @@ export function AppSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 active
-                  ? "bg-sidebar-accent text-white font-medium"
-                  : "text-white/80 hover:bg-sidebar-accent/60 hover:text-white",
+                  ? "bg-sidebar-accent font-medium text-white ring-1 ring-kofc-gold/40"
+                  : "text-white/85 hover:bg-white/10 hover:text-white",
               )}
             >
               <Icon className="size-4 shrink-0 opacity-90" />

@@ -1,6 +1,7 @@
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { signIn, auth } from "@/lib/auth";
+import { CouncilLogo } from "@/components/council-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,18 +28,39 @@ export default async function LoginPage({
   const error = params.error;
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-primary px-4">
-      <div className="mb-8 text-center text-white">
-        <p className="text-kofc-gold text-sm font-medium tracking-widest uppercase">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-kofc-navy px-4">
+      {/* Soft gold glow like council site hero */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-100"
+        style={{
+          background:
+            "radial-gradient(1100px 500px at 50% -10%, rgba(247,183,24,0.18), transparent 60%), linear-gradient(160deg, #112866 0%, #0b1c4a 100%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute right-0 bottom-0 left-0 h-[5px]"
+        style={{
+          background: "linear-gradient(90deg, #F7B718, #CB0E0E, #F7B718)",
+        }}
+      />
+
+      <div className="relative z-10 mb-8 flex flex-col items-center text-center text-white">
+        <CouncilLogo size={96} priority className="mb-5 drop-shadow-lg" />
+        <p className="text-kofc-gold text-sm font-bold tracking-[0.14em] uppercase">
           Knights of Columbus
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-white">
-          Council 10325
+          Council #10325
         </h1>
-        <p className="mt-1 text-white/80">Financial Secretary Companion</p>
+        <p className="mt-1 text-base font-medium text-white/90">
+          Holy Ghost Parish · Wood Dale, Illinois
+        </p>
+        <p className="mt-2 text-sm text-white/75">
+          Financial Secretary Companion
+        </p>
       </div>
 
-      <Card className="w-full max-w-md shadow-xl">
+      <Card className="relative z-10 w-full max-w-md border-white/10 shadow-xl">
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
           <CardDescription>
@@ -71,7 +93,6 @@ export default async function LoginPage({
                 if (e instanceof AuthError) {
                   redirect(`/login?error=${e.type}`);
                 }
-                // NextAuth throws NEXT_REDIRECT on success — rethrow
                 throw e;
               }
             }}
@@ -104,7 +125,7 @@ export default async function LoginPage({
 
           <p className="text-muted-foreground text-center text-xs leading-relaxed">
             Member data is confidential. Official ledgers remain at Officers
-            Online (kofc.org).
+            Online (kofc.org). Emblem used only inside this private app.
           </p>
         </CardContent>
       </Card>

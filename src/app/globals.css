@@ -4,14 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Knights of Columbus palette — Part 8 of PLAN.md
-   Navy #003595 (PMS 661 C), Gold #FAA514 (PMS 137 C), Red #C8102E */
+/* Brand palette from kofc10325.org (2020 KofC brand spec as used on the council site):
+   Knight Navy #112866 · Knight Gold #F7B718 · Knight Red #CB0E0E · Insurance Blue #0077D9 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-head);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -42,8 +42,15 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-kofc-navy: var(--kofc-navy);
+  --color-kofc-navy-dark: var(--kofc-navy-dark);
   --color-kofc-gold: var(--kofc-gold);
+  --color-kofc-gold-dark: var(--kofc-gold-dark);
   --color-kofc-red: var(--kofc-red);
+  --color-kofc-blue: var(--kofc-blue);
+  --color-kofc-bg-soft: var(--kofc-bg-soft);
+  --color-kofc-border: var(--kofc-border);
+  --color-kofc-ink: var(--kofc-ink);
+  --color-kofc-muted: var(--kofc-muted);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -54,76 +61,80 @@
 }
 
 :root {
-  /* Official KofC tokens */
-  --kofc-navy: #003595;
-  --kofc-gold: #faa514;
-  --kofc-red: #c8102e;
+  /* Official council site tokens — kofc10325.org */
+  --kofc-navy: #112866;
+  --kofc-navy-dark: #0b1c4a;
+  --kofc-gold: #f7b718;
+  --kofc-gold-dark: #d49a00;
+  --kofc-red: #cb0e0e;
+  --kofc-blue: #0077d9;
   --kofc-white: #ffffff;
+  --kofc-ink: #1c2433;
+  --kofc-muted: #5a6478;
+  --kofc-bg-soft: #f4f6fb;
+  --kofc-border: #e2e7f0;
 
   --background: #ffffff;
-  --foreground: #1a1a1a;
+  --foreground: #1c2433;
   --card: #ffffff;
-  --card-foreground: #1a1a1a;
+  --card-foreground: #1c2433;
   --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
-  /* Primary = KofC Navy */
-  --primary: #003595;
+  --popover-foreground: #1c2433;
+  --primary: #112866;
   --primary-foreground: #ffffff;
-  --secondary: #f4f5f7;
-  --secondary-foreground: #003595;
-  --muted: #f4f5f7;
-  --muted-foreground: #5c6370;
-  /* Accent = KofC Gold */
-  --accent: #faa514;
-  --accent-foreground: #1a1a1a;
-  /* Destructive = KofC Red */
-  --destructive: #c8102e;
-  --border: #e2e5eb;
-  --input: #e2e5eb;
-  --ring: #003595;
-  --chart-1: #003595;
-  --chart-2: #faa514;
-  --chart-3: #c8102e;
-  --chart-4: #5c6370;
-  --chart-5: #8b929e;
+  --secondary: #f4f6fb;
+  --secondary-foreground: #112866;
+  --muted: #f4f6fb;
+  --muted-foreground: #5a6478;
+  --accent: #f7b718;
+  --accent-foreground: #0b1c4a;
+  --destructive: #cb0e0e;
+  --border: #e2e7f0;
+  --input: #e2e7f0;
+  --ring: #112866;
+  --chart-1: #112866;
+  --chart-2: #f7b718;
+  --chart-3: #cb0e0e;
+  --chart-4: #0077d9;
+  --chart-5: #5a6478;
   --radius: 0.5rem;
-  --sidebar: #003595;
+  --sidebar: #112866;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #faa514;
-  --sidebar-primary-foreground: #1a1a1a;
-  --sidebar-accent: #0a4ab8;
+  --sidebar-primary: #f7b718;
+  --sidebar-primary-foreground: #0b1c4a;
+  --sidebar-accent: #0b1c4a;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #0a4ab8;
-  --sidebar-ring: #faa514;
+  --sidebar-border: rgba(247, 183, 24, 0.35);
+  --sidebar-ring: #f7b718;
 }
 
 .dark {
-  --background: #0b1220;
-  --foreground: #f4f5f7;
-  --card: #121a2b;
-  --card-foreground: #f4f5f7;
-  --popover: #121a2b;
-  --popover-foreground: #f4f5f7;
+  --background: #0b1c4a;
+  --foreground: #f4f6fb;
+  --card: #112866;
+  --card-foreground: #f4f6fb;
+  --popover: #112866;
+  --popover-foreground: #f4f6fb;
   --primary: #4d7fd6;
   --primary-foreground: #ffffff;
-  --secondary: #1a2438;
-  --secondary-foreground: #f4f5f7;
-  --muted: #1a2438;
+  --secondary: #152a5c;
+  --secondary-foreground: #f4f6fb;
+  --muted: #152a5c;
   --muted-foreground: #a0a8b8;
-  --accent: #faa514;
-  --accent-foreground: #1a1a1a;
+  --accent: #f7b718;
+  --accent-foreground: #0b1c4a;
   --destructive: #e84a5f;
-  --border: #2a3548;
-  --input: #2a3548;
+  --border: #1e3566;
+  --input: #1e3566;
   --ring: #4d7fd6;
-  --sidebar: #0b1220;
-  --sidebar-foreground: #f4f5f7;
-  --sidebar-primary: #faa514;
-  --sidebar-primary-foreground: #1a1a1a;
-  --sidebar-accent: #1a2438;
-  --sidebar-accent-foreground: #f4f5f7;
-  --sidebar-border: #2a3548;
-  --sidebar-ring: #faa514;
+  --sidebar: #0b1c4a;
+  --sidebar-foreground: #f4f6fb;
+  --sidebar-primary: #f7b718;
+  --sidebar-primary-foreground: #0b1c4a;
+  --sidebar-accent: #112866;
+  --sidebar-accent-foreground: #f4f6fb;
+  --sidebar-border: #1e3566;
+  --sidebar-ring: #f7b718;
 }
 
 @layer base {
@@ -132,7 +143,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+    font-family: var(--font-body), Roboto, Arial, Helvetica, sans-serif;
   }
   html {
     @apply font-sans;
@@ -143,6 +154,7 @@
   h4,
   h5,
   h6 {
+    font-family: var(--font-head), "Roboto Serif", Georgia, serif;
     @apply text-primary font-semibold tracking-tight;
   }
 }
