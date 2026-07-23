@@ -16,6 +16,7 @@ import {
 import { STATE_LABELS, type RetentionState } from "@/lib/domain/retention";
 import { getRetentionCase } from "../actions";
 import { AdvanceForm } from "../advance-form";
+import { DeleteCaseButton } from "../delete-case-button";
 
 export default async function RetentionCasePage({
   params,
@@ -54,9 +55,15 @@ export default async function RetentionCasePage({
             {c.openedAt.toISOString().slice(0, 10)}
           </p>
         </div>
-        <Button variant="outline" render={<Link href="/retention" />}>
-          All cases
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" render={<Link href="/retention" />}>
+            All cases
+          </Button>
+          <DeleteCaseButton
+            caseId={c.id}
+            memberLabel={`${member.lastName}, ${member.firstName}`}
+          />
+        </div>
       </div>
 
       <RetentionInfoBanner />

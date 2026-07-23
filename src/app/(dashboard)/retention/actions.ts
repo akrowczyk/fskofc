@@ -203,6 +203,55 @@ export async function advanceRetentionCase(
   return { ok: true, message: `Advanced to ${toState}.` };
 }
 
+/**
+ * Permanently delete a retention case and its linked auto-tasks.
+ * Does not delete the member.
+ */
+export async function deleteRetentionCase(caseId: string): Promise<ActionResult> {
+  const user = await requireFs();
+  const db = getDb();
+
+  const rows = await db
+    .select({
+      case: retentionCases,
+      member: members,
+    })
+    .from(retentionCases)
+    .innerJoin(members, eq(retentionCases.memberId, members.id))
+    .where(eq(retentionCases.id, caseId))
+    .limit(1);
+
+  if (!rows[0]) {
+    return { ok: false, error: "Case not found." };
+  }
+
+  const { case: c, member } = rows[0];
+
+  // Remove open/auto tasks tied to this case (avoid orphan retention tasks)
+  await db.delete(tasks).where(eq(tasks.relatedCaseId, caseId));
+
+  await db.delete(retentionCases).where(eq(retentionCases.id, caseId));
+
+  await db.insert(auditLog).values({
+    actor: user.email!,
+    action: "retention.delete",
+    entity: "retention_cases",
+    entityId: caseId,
+    detail: {
+      memberId: c.memberId,
+      memberName: `${member.lastName}, ${member.firstName}`,
+      memberNumber: member.memberNumber,
+      state: c.state,
+    },
+  });
+
+  revalidatePath("/retention");
+  revalidatePath(`/retention/${caseId}`);
+  revalidatePath("/");
+  revalidatePath("/calendar");
+  return { ok: true, message: "Case deleted." };
+}
+
 export async function listMembersForSelect() {
   await requireFs();
   const db = getDb();

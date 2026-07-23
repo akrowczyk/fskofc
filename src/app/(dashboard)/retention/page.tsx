@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table";
 import { STATE_LABELS, type RetentionState } from "@/lib/domain/retention";
 import { listMembersForSelect, listRetentionCases } from "./actions";
+import { DeleteCaseButton } from "./delete-case-button";
 import { OpenCaseForm } from "./open-case-form";
 
 export default async function RetentionPage({
@@ -101,13 +102,14 @@ export default async function RetentionPage({
               <TableHead>State</TableHead>
               <TableHead>Next action</TableHead>
               <TableHead>Due</TableHead>
+              <TableHead className="w-[1%]" />
             </TableRow>
           </TableHeader>
           <TableBody>
             {cases.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={4}
+                  colSpan={5}
                   className="text-muted-foreground py-8 text-center"
                 >
                   No cases yet.
@@ -142,6 +144,13 @@ export default async function RetentionPage({
                   </TableCell>
                   <TableCell className="font-mono text-xs">
                     {c.nextAction.dueDate ?? "—"}
+                  </TableCell>
+                  <TableCell>
+                    <DeleteCaseButton
+                      caseId={c.id}
+                      memberLabel={`${c.member.lastName}, ${c.member.firstName}`}
+                      variant="row"
+                    />
                   </TableCell>
                 </TableRow>
               ))
