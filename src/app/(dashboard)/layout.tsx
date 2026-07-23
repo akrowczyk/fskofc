@@ -15,7 +15,7 @@ export default async function DashboardLayout({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-kofc-border bg-background/95 px-6 backdrop-blur">
           <p className="text-muted-foreground text-sm">
-            Financial Secretary operations cockpit
+            Financial Secretary Operations Cockpit
           </p>
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground hidden text-sm sm:inline">
