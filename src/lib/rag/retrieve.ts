@@ -11,30 +11,43 @@ export type RetrievedPassage = {
 };
 
 /**
- * Ensure seed handbook chunks exist (idempotent by document title).
+ * Ensure seed handbook chunks exist. Replaces chunks when SEED_REF changes.
  */
+const SEED_TITLE = "FS Handbook (seed excerpts)";
+const SEED_REF = "1295A 8/25 + financial officer training 2024 + handbook domain rules";
+
 export async function ensureHandbookSeeded(): Promise<void> {
   const db = getDb();
   const existing = await db
-    .select({ id: kbDocuments.id })
+    .select({ id: kbDocuments.id, sourceRef: kbDocuments.sourceRef })
     .from(kbDocuments)
-    .where(eq(kbDocuments.title, "FS Handbook (seed excerpts)"))
+    .where(eq(kbDocuments.title, SEED_TITLE))
     .limit(1);
 
-  if (existing[0]) return;
+  if (existing[0]?.sourceRef === SEED_REF) return;
 
-  const [doc] = await db
-    .insert(kbDocuments)
-    .values({
-      title: "FS Handbook (seed excerpts)",
-      sourceType: "handbook",
-      sourceRef: "PLAN.md domain rules / handbook 12/2009",
-    })
-    .returning({ id: kbDocuments.id });
+  let docId = existing[0]?.id;
+  if (docId) {
+    await db.delete(kbChunks).where(eq(kbChunks.documentId, docId));
+    await db
+      .update(kbDocuments)
+      .set({ sourceRef: SEED_REF, ingestedAt: new Date() })
+      .where(eq(kbDocuments.id, docId));
+  } else {
+    const [doc] = await db
+      .insert(kbDocuments)
+      .values({
+        title: SEED_TITLE,
+        sourceType: "handbook",
+        sourceRef: SEED_REF,
+      })
+      .returning({ id: kbDocuments.id });
+    docId = doc.id;
+  }
 
   await db.insert(kbChunks).values(
     HANDBOOK_SEED_CHUNKS.map((c, i) => ({
-      documentId: doc.id,
+      documentId: docId,
       chunkIndex: i,
       heading: c.heading,
       content: c.content,

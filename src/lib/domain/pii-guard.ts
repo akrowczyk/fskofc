@@ -56,7 +56,7 @@ export function rejectTaxIdFields(
         ok: false,
         field,
         reason:
-          "Tax IDs (SSN, ITIN, EIN, including last-four) must not be stored at the council level. Remove any tax identification numbers and try again.",
+          "Member tax IDs (SSN, ITIN, including last-four) must not be stored. Council EIN belongs only in Settings or the audit worksheet EIN field — remove other tax identification numbers and try again.",
       };
     }
   }

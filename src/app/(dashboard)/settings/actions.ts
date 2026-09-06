@@ -40,6 +40,7 @@ export async function saveCouncilSettings(
     compPercent: formData.get("compPercent"),
     duesDefault: formData.get("duesDefault"),
     duesUnder26: formData.get("duesUnder26"),
+    councilEin: String(formData.get("councilEin") ?? "") || null,
     bondingNote: String(formData.get("bondingNote") ?? "") || null,
   };
 
@@ -84,6 +85,7 @@ export async function saveCouncilSettings(
     compPercent: String(data.compPercent),
     duesDefault: String(data.duesDefault),
     duesUnder26: String(data.duesUnder26),
+    councilEin: data.councilEin ?? null,
     bondingNote: data.bondingNote,
     updatedAt: new Date(),
   };

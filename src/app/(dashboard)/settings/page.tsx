@@ -65,9 +65,9 @@ export default async function SettingsPage() {
         <CardHeader>
           <CardTitle className="text-base">PII / tax-ID guard</CardTitle>
           <CardDescription>
-            The app rejects writes that look like SSNs, ITINs, or EINs
-            (including last-four patterns). Matches the handbook rule: tax IDs
-            are not to be requested or retained at the council level.
+            Member SSNs and ITINs (including last-four) are rejected everywhere.
+            The council&apos;s own EIN is stored only in the dedicated field
+            above and on the 1295A worksheet.
           </CardDescription>
         </CardHeader>
         <CardContent className="text-muted-foreground text-sm">

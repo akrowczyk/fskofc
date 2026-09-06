@@ -93,22 +93,30 @@ export function expandBuiltinDeadlines(opts: ExpandOptions = {}): DeadlineOccurr
         "Pay Per Capita / CA / Culture of Life. Hard-alert well before $50 arrearage auto-suspension.",
         30,
       ),
-      // Semi-annual audit — due in Jan & Jul (prep window)
+      // Annual council audit 1295A — period ending Jun 30, due Aug 15
       occ(
-        `audit-jan-${year}`,
-        `Semi-annual audit #1295 (Jan ${year})`,
+        `audit-1295a-${year}`,
+        `Annual council audit 1295A (period ending Jun 30, ${year})`,
         "audit",
-        dateInYear(year, 1, 31),
-        "GK + trustees perform audit. FS gathers records. Frozen roster dated Jan 1. Bond void if last two audits not on file.",
-        21,
+        dateInYear(year, 8, 15),
+        "File the Annual Council Audit Report in Officers Online. Do not mail the worksheet to Supreme. Trustees conduct; FS supplies records. Bond is void if the last two audits are not on file.",
+        45,
       ),
       occ(
-        `audit-jul-${year}`,
-        `Semi-annual audit #1295 (Jul ${year})`,
+        `cash-handoff-jun-${year}`,
+        `Turn over all cash to Treasurer (Jun 30, ${year})`,
         "audit",
-        dateInYear(year, 7, 31),
-        "GK + trustees perform audit. FS gathers records. Frozen roster dated Jul 1.",
-        21,
+        dateInYear(year, 6, 30),
+        "Do not hold council money on June 30 (audit period end). FS turns funds over to Treasurer so cash-on-hand is reconcilable.",
+        7,
+      ),
+      occ(
+        `cash-handoff-dec-${year}`,
+        `Turn over all cash to Treasurer (Dec 31, ${year})`,
+        "audit",
+        dateInYear(year, 12, 31),
+        "Do not hold council money on Dec 31. FS turns funds over to Treasurer.",
+        7,
       ),
       // Form 365 by Aug 1
       occ(
@@ -125,7 +133,7 @@ export function expandBuiltinDeadlines(opts: ExpandOptions = {}): DeadlineOccurr
         `Bonding charge window (Mar ${year})`,
         "bonding",
         dateInYear(year, 3, 15),
-        "Bond runs Mar 1 → end of Feb. Confirm last two #1295 audits on file or bond is void.",
+        "Bond runs Mar 1 → end of Feb. Confirm last two annual 1295A audits on file at Supreme or bond is void.",
         14,
       ),
       occ(
@@ -159,7 +167,7 @@ export function expandBuiltinDeadlines(opts: ExpandOptions = {}): DeadlineOccurr
         `Form 990 due (FY ending ${year})`,
         "990",
         form990DueDate(fyEnd, year),
-        "US councils 501(c)(8). Due 15th day of 5th month after FY end. Miss 3 consecutive years → lose tax-exempt status. Verify current IRS receipt thresholds.",
+        "US councils 501(c)(8). Due 15th day of 5th month after FY end. 990-N if gross receipts normally ≤ $50,000; longer form at $50,000+. Miss 3 consecutive years → lose tax-exempt status.",
         45,
       ),
     );

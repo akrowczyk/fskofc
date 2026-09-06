@@ -26,7 +26,7 @@ export const agentTools: ChatCompletionTool[] = [
     function: {
       name: "explain_form",
       description:
-        "Explain a KofC form by number (e.g. 1845, 100, 157, 423, 424, 1295, 365, 990).",
+        "Explain a KofC form by number (e.g. 1845, 100, 157, 423, 424, 1295, 1295A, 365, 990).",
       parameters: {
         type: "object",
         properties: {

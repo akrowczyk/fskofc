@@ -30,6 +30,7 @@ const FIELD_LABELS: Record<string, string> = {
   compPercent: "Compensation %",
   duesDefault: "Default dues",
   duesUnder26: "Dues under 26",
+  councilEin: "Council EIN",
   bondingNote: "Bonding notes",
   year: "Year",
   duesCollected: "Dues collected",

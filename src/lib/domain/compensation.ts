@@ -44,18 +44,6 @@ function round2(n: number) {
   return Math.round(n * 100) / 100;
 }
 
-export const DEFAULT_AUDIT_CHECKLIST: Record<string, boolean> = {
-  "Member Billing ledgers / dues records": false,
-  "Receipts and vouchers for period": false,
-  "Order on Treasurer (#157) copies": false,
-  "Bank statements (Treasurer)": false,
-  "Council Statement copies": false,
-  "Minutes / Recorder reports as needed": false,
-  "Frozen roster (Jan 1 or Jul 1)": false,
-  "Bonding status confirmation": false,
-  "Prior audit #1295 copy": false,
-};
-
 export type ScheduleBLine = { label: string; amount: number };
 export type ScheduleCLine = { label: string; amount: number };
 

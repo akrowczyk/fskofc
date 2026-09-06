@@ -37,3 +37,10 @@ export const SUPREME_CERT_COMP = 0.4;
 
 /** 1099-MISC threshold */
 export const FORM_1099_THRESHOLD = 599.99;
+
+/** IRS 990-N (e-Postcard) gross-receipts ceiling — training 2024 / current IRS */
+export const IRS_990N_GROSS_RECEIPTS = 50_000;
+
+/** 990-EZ vs full Form 990 (from IRS 990-EZ instructions; verify current) */
+export const IRS_990EZ_GROSS_RECEIPTS = 200_000;
+export const IRS_990EZ_TOTAL_ASSETS = 500_000;

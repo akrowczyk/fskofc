@@ -178,6 +178,8 @@ export const councilSettings = pgTable("council_settings", {
   duesUnder26: numeric("dues_under26", { precision: 10, scale: 2 }).default(
     "15.00",
   ),
+  /** Council EIN only (organizational). Never store member SSNs. */
+  councilEin: text("council_ein"),
   bondingNote: text("bonding_note"),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
@@ -357,7 +359,7 @@ export const deadlineRules = pgTable("deadline_rules", {
   active: boolean("active").default(true).notNull(),
 });
 
-// ─── Audit prep ──────────────────────────────────────────────────────────────
+// ─── Audit prep (1295A annual worksheet stored in scheduleB jsonb) ────────────
 
 export const auditPeriods = pgTable("audit_periods", {
   id: uuid("id").defaultRandom().primaryKey(),

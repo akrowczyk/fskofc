@@ -46,6 +46,20 @@ export const councilSettingsSchema = z.object({
       .number({ error: "Dues under 26 must be a number" })
       .min(3, "Dues under 26 must be at least $3"),
   ),
+  councilEin: z.preprocess(
+    emptyToNull,
+    z
+      .union([
+        z.null(),
+        z
+          .string()
+          .regex(
+            /^\d{2}-\d{7}$/,
+            "Council EIN must look like 12-3456789",
+          ),
+      ])
+      .optional(),
+  ),
   bondingNote: z.string().max(2000).optional().nullable(),
 });
 

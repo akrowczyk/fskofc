@@ -12,8 +12,21 @@ describe("expandBuiltinDeadlines", () => {
     expect(keys).toContain("payby-apr-2026");
     expect(keys).toContain("payby-oct-2026");
     expect(keys).toContain("form365-2026");
-    expect(keys).toContain("audit-jan-2026");
+    expect(keys).toContain("audit-1295a-2026");
+    expect(keys).not.toContain("audit-jan-2026");
+    expect(keys).not.toContain("audit-jul-2026");
+    expect(keys).toContain("cash-handoff-jun-2026");
     expect(keys).toContain("form990-fy2025"); // FY ending 2025 due in 2026
+  });
+
+  it("annual 1295A is due August 15 for the June 30 period", () => {
+    const occ = expandBuiltinDeadlines({
+      from: "2026-08-01",
+      to: "2026-08-31",
+    });
+    const audit = occ.find((o) => o.key === "audit-1295a-2026");
+    expect(audit?.dueDate).toBe("2026-08-15");
+    expect(audit?.category).toBe("audit");
   });
 
   it("form990 due date for calendar FY is May 15", () => {

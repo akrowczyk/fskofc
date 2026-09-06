@@ -45,19 +45,19 @@ export const HANDBOOK_SEED_CHUNKS: HandbookChunkSeed[] = [
     heading: "Bonding",
     sourceRef: "Handbook bonding",
     content:
-      "Bond is $5,000 automatic free on the office (not the person). Additional coverage at $7 per thousand. Cap $125,000 total per council including $5k each on FS and Treasurer. Bond runs Mar 1 through end of February. Bond is void if the last two semi-annual audits (#1295) are not on file at Supreme.",
+      "Bond is $5,000 automatic free on the Treasurer and Financial Secretary offices (not the person). Additional coverage at $7 per thousand. Cap $125,000 total per council including $5k each on FS and Treasurer. Bond runs Mar 1 through end of February. Bond is void if the last two annual council audits (1295A) are not on file at Supreme.",
   },
   {
     heading: "Form 990",
     sourceRef: "Handbook / IRS 501(c)(8)",
     content:
-      "US councils are 501(c)(8). Form 990 due on the 15th day of the 5th month after fiscal year end. 2009 handbook referenced 990-N at ≤$25k gross receipts — VERIFY CURRENT IRS THRESHOLDS. Missing three consecutive years can lose tax-exempt status.",
+      "US councils are 501(c)(8). Each council must have its own EIN (questions: Tax.EIN@KofC.org). File Form 990 annually. Gross receipts normally under $50,000: 990-N e-Postcard online. $50,000 and above: 990-EZ or full 990; council may need a tax advisor. Due 15th day of the 5th month after fiscal year end. Missing three consecutive years can lose tax-exempt status.",
   },
   {
-    heading: "Semi-annual audit #1295",
-    sourceRef: "Handbook audit",
+    heading: "Annual council audit 1295A",
+    sourceRef: "Financial officer training 2024 / form 1295A 8/25",
     content:
-      "Semi-annual audit Form #1295 is performed in January and July by the Grand Knight and trustees. FS prepares records. Frozen rosters dated Jan 1 and Jul 1. If Member Billing is used, Schedule A may be auto-reconciled. Bond depends on last two audits on file.",
+      "The Annual Council Audit Report (1295A) covers the period ending June 30 and is due August 15. Trustees conduct the audit using records from the Financial Secretary and Treasurer; FS and Treasurer should be available. Do not hold council money on June 30 (or December 31). Prep the worksheet locally, then submit the report in Officers Online — do not mail the worksheet to Supreme. The worksheet includes a balance sheet (including Square/PayPal/Venmo undeposited and credit cards), statement of cash flows, optional Knights of Columbus Charitable Fund (KCCF) council account, council EIN, and whether Form 990 was filed this year. Signatures: Grand Knight and at least two of three trustees. Older paper Form 1295 was semi-annual (Jan–Jun due Aug 15; Jul–Dec due Feb 15) with Schedule A skipped when Member Management / Member Billing is used.",
   },
   {
     heading: "Records retention and tax IDs",

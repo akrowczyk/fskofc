@@ -28,10 +28,13 @@ const FORM_BLURBS: Record<string, string> = {
   "100":
     "Form 100 member transactions including suspension. Requires #1845 on file 60 days for suspension.",
   "157": "Order on Treasurer: pay moneys to Treasurer; GK countersign.",
-  "1295": "Semi-annual audit (Jan & Jul) by GK + trustees.",
+  "1295":
+    "Annual Council Audit Report (1295A). Period ending June 30; due August 15. Trustees conduct; FS supplies records. Prep in this app, then file in Officers Online — do not mail the worksheet to Supreme. GK + at least 2 of 3 trustees sign. Bond depends on last two audits on file.",
+  "1295A":
+    "Annual Council Audit Report (1295A). Period ending June 30; due August 15. Trustees conduct; FS supplies records. Prep in this app, then file in Officers Online — do not mail the worksheet to Supreme. GK + at least 2 of 3 trustees sign. Bond depends on last two audits on file.",
   "365": "Service Program Personnel Report; due Aug 1; GK owns.",
   "990":
-    "Federal Form 990; due 15th day of 5th month after FY end. Verify IRS thresholds.",
+    "Federal Form 990 annually. Each council needs its own EIN (Tax.EIN@KofC.org). Under $50,000 gross receipts: 990-N online. $50,000+: longer form (990-EZ or 990). Due 15th day of 5th month after FY end.",
   "185": "Officer elections report via Member Management.",
 };
 

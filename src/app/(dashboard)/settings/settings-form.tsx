@@ -79,6 +79,21 @@ export function SettingsForm({
             />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="councilEin">Council EIN</Label>
+            <Input
+              id="councilEin"
+              name="councilEin"
+              defaultValue={settings?.councilEin ?? ""}
+              placeholder="12-3456789"
+              inputMode="numeric"
+              autoComplete="off"
+            />
+            <p className="text-muted-foreground text-xs">
+              Organizational EIN only — never a member SSN. Questions:{" "}
+              Tax.EIN@KofC.org
+            </p>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="fromEmail">From email (Resend)</Label>
             <Input
               id="fromEmail"
@@ -166,7 +181,7 @@ export function SettingsForm({
               name="bondingNote"
               defaultValue={settings?.bondingNote ?? ""}
               rows={2}
-              placeholder="Bond void if last two audits (#1295) not on file at Supreme."
+              placeholder="Bond void if last two annual 1295A audits not on file at Supreme."
             />
           </div>
 
