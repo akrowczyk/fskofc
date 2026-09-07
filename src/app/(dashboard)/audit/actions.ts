@@ -1,6 +1,6 @@
 "use server";
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/db";
@@ -157,8 +157,9 @@ export async function seedYearFilings(year: number): Promise<ActionResult> {
     {
       kind: "form_365" as const,
       periodLabel: String(year),
-      dueDate: `${year}-08-01`,
+      dueDate: `${year}-06-30`,
       status: "upcoming" as const,
+      note: "Star Council / Officers Online due June 30. Paper Form 365 lists received-by July 1. GK owns; FS nudges.",
     },
     {
       kind: "form_990" as const,
@@ -177,7 +178,24 @@ export async function seedYearFilings(year: number): Promise<ActionResult> {
   ];
 
   for (const r of rows) {
-    await db.insert(filingRecords).values(r);
+    const existing = await db
+      .select({ id: filingRecords.id })
+      .from(filingRecords)
+      .where(
+        and(
+          eq(filingRecords.kind, r.kind),
+          eq(filingRecords.periodLabel, r.periodLabel),
+        ),
+      )
+      .limit(1);
+    if (existing[0]) {
+      await db
+        .update(filingRecords)
+        .set({ dueDate: r.dueDate, note: r.note })
+        .where(eq(filingRecords.id, existing[0].id));
+    } else {
+      await db.insert(filingRecords).values(r);
+    }
   }
   await db.insert(auditLog).values({
     actor: user.email!,

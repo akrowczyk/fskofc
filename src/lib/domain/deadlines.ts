@@ -118,13 +118,22 @@ export function expandBuiltinDeadlines(opts: ExpandOptions = {}): DeadlineOccurr
         "Do not hold council money on Dec 31. FS turns funds over to Treasurer.",
         7,
       ),
-      // Form 365 by Aug 1
+      // Form 365 by Jun 30 (current Supreme forms index / Star Council; paper 365 lists Jul 1)
       occ(
         `form365-${year}`,
-        `Form 365 Service Program Personnel (due Aug 1, ${year})`,
+        `Form 365 Service Program Personnel (due Jun 30, ${year})`,
         "365",
-        dateInYear(year, 8, 1),
-        "GK owns filing via Member Management; FS nudges. Due at Supreme Aug 1.",
+        dateInYear(year, 6, 30),
+        "GK owns filing via Member Management; FS nudges. Due June 30 for Star Council. Paper Form 365 (9/25) lists received-by July 1. Older handbook said August 1 — do not use that date.",
+        30,
+      ),
+      // Form 185 officers chosen — GK owns; FS nudges
+      occ(
+        `form185-${year}`,
+        `Form 185 Report of Officers Chosen (due Jun 30, ${year})`,
+        "member",
+        dateInYear(year, 6, 30),
+        "GK owns filing via Member Management; FS nudges. Due June 30. Needed for Star Council and Safe Environment role setup.",
         21,
       ),
       // Bonding Mar/Apr
@@ -180,7 +189,7 @@ export function expandBuiltinDeadlines(opts: ExpandOptions = {}): DeadlineOccurr
           `Review Council Statement (${month}/${year})`,
           "assessment",
           dateInYear(year, month, 1),
-          "Review monthly Council Statement; read at next meeting. Watch arrearage approaching $50 auto-suspension.",
+          "Review monthly Council Statement; read at next meeting. At the planning meeting, process pending receipts and vouchers in Member Billing; report finalized receipts/vouchers at the council meeting. Watch arrearage approaching $50 auto-suspension.",
           3,
         ),
       );

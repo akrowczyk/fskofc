@@ -14,7 +14,8 @@ export type RetrievedPassage = {
  * Ensure seed handbook chunks exist. Replaces chunks when SEED_REF changes.
  */
 const SEED_TITLE = "FS Handbook (seed excerpts)";
-const SEED_REF = "1295A 8/25 + financial officer training 2024 + handbook domain rules";
+const SEED_REF =
+  "1295A 8/25 + FS Overview V6 + Form 365 due 6/30 + financial officer training 2024 + handbook domain rules";
 
 export async function ensureHandbookSeeded(): Promise<void> {
   const db = getDb();

@@ -119,7 +119,7 @@ export default async function AuditPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-base">Filing tracker</CardTitle>
-            <CardDescription>990, 365, 1295A, bonding</CardDescription>
+            <CardDescription>990, 365 (Jun 30), 1295A, bonding</CardDescription>
           </div>
           <SeedFilingsButton />
         </CardHeader>

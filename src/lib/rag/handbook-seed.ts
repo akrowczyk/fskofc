@@ -1,6 +1,7 @@
 /**
- * Seed passages derived from FS Handbook rules encoded in the app plan.
- * Replace/extend by ingesting the full PDF later (Ticket 9 re-runnable path).
+ * Seed passages derived from FS Handbook rules plus later Supreme training
+ * (FS Overview V6, Financial Officer Training, 1295A 8/25).
+ * Replace/extend by ingesting the full PDFs later (Ticket 9 re-runnable path).
  * Dollar figures flagged as 2009 defaults — verify current Supreme/IRS values.
  */
 
@@ -72,15 +73,45 @@ export const HANDBOOK_SEED_CHUNKS: HandbookChunkSeed[] = [
       "Member Management and Member Billing cannot store member phone numbers or email addresses. Contact data must be maintained locally for outreach, retention personal contact, and correspondence. This companion app is a mirror for contact and workflow — not the ledger of record.",
   },
   {
-    heading: "Order on Treasurer #157",
-    sourceRef: "Handbook vouchers",
+    heading: "Receipts and vouchers (Member Billing)",
+    sourceRef: "FS Overview V6 / Financial officer training",
     content:
-      "Moneys are paid to the Treasurer via Order on Treasurer (#157), countersigned by the Grand Knight. Track draft data, approval, countersign, and check number in council process. Official ledger remains Member Billing when used.",
+      "In Member Billing, receipts are incoming funds and vouchers are outgoing funds. FS enters receipts and bills-as-vouchers in Member Billing and produces reports from Print Center. Paper Order on Treasurer (#157), countersigned by the Grand Knight, is the older equivalent. Modern voucher: FS prepares it, FS and GK sign, voucher is given to the Treasurer, Treasurer writes the check. Official ledger remains Member Billing. Do not make this companion app a second ledger of record.",
+  },
+  {
+    heading: "Council flow of received funds",
+    sourceRef: "FS Overview V6",
+    content:
+      "All incoming monies go to the Financial Secretary (dues, donations, events, etc.). Event chairmen turn funds over to the FS; record amounts, dates, sources, and presenters; FS issues receipts to presenters. Then: FS turns monies over to the Treasurer; Treasurer fills out a receipt; FS retains the signed receipt; Treasurer retains a copy and deposits cash. Do not hold council money on June 30 or December 31.",
+  },
+  {
+    heading: "Processing of council bills",
+    sourceRef: "FS Overview V6",
+    content:
+      "Council bill flow: (1) FS receives bills; (2) Trustees review bills; (3) Bills are read at the officer planning meeting; (4) Payment is approved by the council; (5) FS prepares the voucher in Member Billing; (6) Voucher is signed by FS and Grand Knight; (7) Voucher is given to the Treasurer; (8) Treasurer writes the check. Do not skip trustee review or council approval.",
+  },
+  {
+    heading: "Planning vs council meetings",
+    sourceRef: "FS Overview V6",
+    content:
+      "At planning meetings, process Pending Receipts and Pending Vouchers in Member Billing. At council meetings, report finalized Receipts and Vouchers. The finalized Receipt Report is submitted by the FS and received by the Treasurer. The finalized Voucher Report is signed by the FS, Grand Knight, and Treasurer.",
   },
   {
     heading: "Form 365",
-    sourceRef: "Handbook Form 365",
+    sourceRef: "Supreme forms index / Form 365 9/25 / Star Council",
     content:
-      "Service Program Personnel Report Form 365 is due at Supreme by August 1. Grand Knight owns filing via Member Management; Financial Secretary should nudge.",
+      "Service Program Personnel Report Form 365 is due June 30 (current Supreme forms index and Star Council). Paper Form 365 (rev 9/25) lists received-by July 1. Grand Knight owns filing via Member Management (preferred); Financial Secretary should nudge. Required roles include Program Director, Family Director, Community Director, Membership Director, and Retention Chairman. Mid-year changes should be updated in Member Management. The 2009 handbook listed August 1 — do not use that date. Some Officers Online screenshots label this report 385; the form number is 365.",
+  },
+  {
+    heading: "Form 185",
+    sourceRef: "Supreme forms index / FS Overview V6",
+    content:
+      "Report of Officers Chosen for Term (Form 185) is due June 30. File via Member Management (preferred). Grand Knight owns; Financial Secretary maintains membership/officer records and should nudge. Needed for Star Council. Officers Online screenshots may show July 1; current forms index is June 30. Form 185 plus Form 365 feed Safe Environment Program role setup.",
+  },
+  {
+    heading: "Officers Online reports FS should know",
+    sourceRef: "FS Overview V6 Officers Online",
+    content:
+      "Officers Online Reports include Membership Roster (current plus January 1 and July 1 freezes), Safe Environment Member Status, Safe Environment Participation Rate, Safe Environment Council Compliance, and past Council Billing Statements. Review Safe Environment reports; they are not stored in this companion app. Form 1728 Annual Survey of Fraternal Activity is due January 31 (GK/program owns; FS may nudge).",
   },
 ];

@@ -27,15 +27,24 @@ const FORM_BLURBS: Record<string, string> = {
     "Notice of Intent to Suspend: FS + GK; copies to member, Supreme, SD, DD, file. +60d Form 100 eligible; +90d void.",
   "100":
     "Form 100 member transactions including suspension. Requires #1845 on file 60 days for suspension.",
-  "157": "Order on Treasurer: pay moneys to Treasurer; GK countersign.",
+  "157":
+    "Order on Treasurer (#157) is the older paper voucher. Current process: enter bills as vouchers in Member Billing; FS prepares, FS + GK sign, Treasurer writes the check. Official ledger remains Member Billing.",
   "1295":
-    "Annual Council Audit Report (1295A). Period ending June 30; due August 15. Trustees conduct; FS supplies records. Prep in this app, then file in Officers Online — do not mail the worksheet to Supreme. GK + at least 2 of 3 trustees sign. Bond depends on last two audits on file.",
+    "Annual Council Audit Report (1295A). Period ending June 30; due August 15. Trustees conduct; FS supplies records. Prep in this app, then file in Officers Online — do not mail the worksheet to Supreme. GK + at least 2 of 3 trustees sign. Bond depends on last two audits on file. February/semiannual 1295 is no longer required (Resolution 402, effective 2025–2026).",
   "1295A":
-    "Annual Council Audit Report (1295A). Period ending June 30; due August 15. Trustees conduct; FS supplies records. Prep in this app, then file in Officers Online — do not mail the worksheet to Supreme. GK + at least 2 of 3 trustees sign. Bond depends on last two audits on file.",
-  "365": "Service Program Personnel Report; due Aug 1; GK owns.",
+    "Annual Council Audit Report (1295A). Period ending June 30; due August 15. Trustees conduct; FS supplies records. Prep in this app, then file in Officers Online — do not mail the worksheet to Supreme. GK + at least 2 of 3 trustees sign. Bond depends on last two audits on file. February/semiannual 1295 is no longer required (Resolution 402, effective 2025–2026).",
+  "365":
+    "Service Program Personnel Report; due June 30 (Star Council / Supreme forms index). Paper Form 365 lists received-by July 1. GK owns via Member Management; FS nudges. Older handbook said August 1 — ignore that.",
+  "385":
+    "Officers Online screenshots sometimes label Service Program Personnel as 385; the form number is 365, due June 30.",
   "990":
     "Federal Form 990 annually. Each council needs its own EIN (Tax.EIN@KofC.org). Under $50,000 gross receipts: 990-N online. $50,000+: longer form (990-EZ or 990). Due 15th day of 5th month after FY end.",
-  "185": "Officer elections report via Member Management.",
+  "185":
+    "Report of Officers Chosen for Term. Due June 30. File via Member Management. GK owns; FS nudges. Needed for Star Council and Safe Environment role setup.",
+  "1728":
+    "Annual Survey of Fraternal Activity. Due January 31. GK/program owns; FS may nudge. Star Council requirement.",
+  "101":
+    "Application for Appointment as Financial Secretary. As needed. Filed when a new FS is appointed.",
 };
 
 export async function runAgentTool(
@@ -55,7 +64,10 @@ export async function runAgentTool(
     case "explain_form": {
       const { form_number } = toolInputSchemas.explain_form.parse(rawInput);
       const key = form_number.replace(/[^0-9a-zA-Z]/g, "").toUpperCase();
-      const normalized = key.startsWith("KA") ? "KA1" : key.replace(/^0+/, "") || key;
+      const stripped = key.startsWith("KA")
+        ? "KA1"
+        : key.replace(/^[A-Z]+/, "") || key;
+      const normalized = stripped.replace(/^0+/, "") || stripped;
       const blurb =
         FORM_BLURBS[normalized] ??
         FORM_BLURBS[form_number] ??

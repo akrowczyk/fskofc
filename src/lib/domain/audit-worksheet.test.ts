@@ -65,6 +65,9 @@ describe("1295A worksheet", () => {
     expect(merged["Ready to enter in Officers Online (do not mail worksheet to Supreme)"]).toBe(
       false,
     );
+    expect(
+      merged["FS report of vouchers (Member Billing / Print Center; FS + GK signed)"],
+    ).toBe(false);
     expect(merged["Obsolete key"]).toBeUndefined();
   });
 });

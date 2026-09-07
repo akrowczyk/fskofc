@@ -99,7 +99,7 @@ export type MoneyMap<T extends readonly { key: string }[]> = Record<
 export const DEFAULT_AUDIT_CHECKLIST: Record<string, boolean> = {
   "Turned over all cash to Treasurer (do not hold money on Jun 30)": false,
   "FS report of receipts for the period": false,
-  "FS report of vouchers / #157 copies": false,
+  "FS report of vouchers (Member Billing / Print Center; FS + GK signed)": false,
   "Paper copies of transactions": false,
   "Treasurer ledger and/or register": false,
   "Treasurer receipt books": false,
